@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useSongContext } from '../context/SongContext';
 
 const MusicUploadForm = () => {
-  const { addSong, isUploading, setIsUploading, setUploadProgress } = useSongContext();
+  const {
+    songsData,
+    addSong,
+    isUploading,
+    setIsUploading,
+    setUploadProgress,
+  } = useSongContext();
+
   const [artist, setArtist] = useState('');
   const [songName, setSongName] = useState('');
   const [trackId, setTrackId] = useState('');
@@ -31,7 +38,11 @@ const MusicUploadForm = () => {
           clearInterval(interval);
 
           setTimeout(() => {
+            // Find the maximum id in the existing songs
+            const maxId = Math.max(...songsData.map((song) => song.id), 0);
+
             const newSongData = {
+              id: maxId + 1, // Assign a new id
               artist,
               songName,
               trackId,
